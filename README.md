@@ -2,7 +2,9 @@
 A Personal Portfolio of CS50AI’s Laboratories and Problem Sets (2022-2023)
 
 <!--- Description ---> 
-This repository contains all the notes, laboratories, and problem sets I did during CS50. Each dropdown, for every activity, contains the hyperlinks to the submitted code and the acitivty's instructions. This was made only to add the created programs to my portfolio. This does **_NOT_** aim to provide students currently taking the course with the solutions for these activities.
+This repository contains all the notes, laboratories, and problem sets I did during CS50. 
+
+<!--- Each dropdown for every activity contains the hyperlinks to the submitted code and the activity's instructions. This was made only to add the created programs to my portfolio. This does **_NOT_** aim to provide students currently taking the course with the solutions for these activities. --->
 
 ---
 
