@@ -58,21 +58,23 @@
         4. path cost (from initial state to node)
     
     FRONTIER - set of all possible unexplored nodes from a given state
+'''
 
-    ** SEARCH ALGORITHM **
-    1. Start with a frontier that contains the initial state (one state)
-    2. Start with an empty explored set (no states)
-    3. Repeat:
-        a. if the frontier is empty, then no solution
-        b. remove a node from the frontier
-        c. if the removed node contains goal state, return the solution
-        d. else, add the current node to the explored set
-        e. and expand the node
-        f. add resulting nodes not in the explored set to the frontier
+    # ! ** SEARCH ALGORITHM **
+    # 1. Start with a frontier that contains the initial state (one state)
+    # 2. Start with an empty explored set (no states)
+    # 3. Repeat:
+    #     a. if the frontier is empty, then no solution
+    #     b. remove a node from the frontier
+    #     c. if the removed node contains goal state, return the solution
+    #     d. else, add the current node to the explored set
+    #     e. and expand the node
+    #     f. add resulting nodes not in the explored set to the frontier
     
-    * keep track of explored states and do not add them to the frontier to avoid infinite loops between reversible actions and states
-    * it is important to determine how nodes are added and removed from the frontier
-    
+    # * keep track of explored states and do not add them to the frontier to avoid infinite loops between reversible actions and states
+    # * it is important to determine how nodes are added and removed from the frontier
+
+'''
     STACK 
     - data structure that follows the LIFO (last-in, first-out) principle
     - used for adding and removing nodes from the frontier
@@ -88,5 +90,76 @@
             * slower but will find the optimal solution
 '''
 
-#! 36:36 (code)
+## * Classes
+# template for creating objects
+'''
+    TEMPLATE
+        class Name:
+            def __init__(self, var1, var2):
+                self.var1 = var1
+                self.var2 = var2
+
+            def method(self, var3):
+                return var3
+''' ## ! TEMPLATE FOR SEARCH ALGORITHM
+class Node:
+    def __init__(self, state, parent, action):
+        self.state = state
+        self.parent = parent
+        self.action = action
+
+class StackFrontier:
+    def __init__(self):
+        self.frontier = [] ## empty list
+    
+    def add(self, node):
+        self.frontier.append(node) ## add node to the end of the list
+
+    def contains_state(self, state):
+        return any(node.state == state for node in self.frontier) ## check if any node in the frontier has the same state as the given state
+    
+    def empty(self):
+        return len(self.frontier) == 0 ## check if the frontier is empty
+    
+    def remove(self):
+        if self.empty():
+            raise Exception("empty frontier") 
+        else:
+            node = self.frontier[-1] ## get the last node in the frontier
+            self.frontier = self.frontier[:-1] ## remove the last node in the frontier
+            return node
+
+class QueueFrontier(StackFrontier):
+    # inherits functions from StackFrontier but overrides its remove function
+    def remove(self):
+        if self.empty():
+            raise Exception("empty frontier")
+        else:
+            node = self.frontier[0]
+            self.frontier = self.frontier[1:]
+            return node
+
+## ! refer to src0/maze.py for sample implementation of solving, goal test, and path cost using search algorithm
+
+## * Searches (Cont.)
+'''
+    Uninformed sesarch - does not use any problem-specific knowledge
+        1. Breadth-First Search (BFS)
+        2. Depth-First Search (DFS)
+
+    Informed search - uses problem-specific knowledge to find solutions more efficiently
+        1. Greedy Best-First Search
+        2. A* Search
+
+'''
+
+## * Greedy Best-First Search
+# expands the node closest to the goal based on a heuristic function "h(n)"
+'''
+    h(n):
+    estimates the cost of the cheapest path from the state at node "n" to a goal state
+
+'''
+
+## ! 56:02
 # https://learning.edx.org/course/course-v1:HarvardX+CS50AI+1T2020/block-v1:HarvardX+CS50AI+1T2020+type@sequential+block@a52582b244c849289b4745d601fa6d43/block-v1:HarvardX+CS50AI+1T2020+type@vertical+block@c52e9c5a2ffc4c658dbf2ead90eca070
