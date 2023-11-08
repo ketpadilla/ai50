@@ -229,3 +229,11 @@ class QueueFrontier(StackFrontier):
 '''
 
 ## ! Search algorithms - used when AI is tasked to make a decision
+
+## * Quiz 1
+'''
+    1. BFS will sometimes, but not always, find a shorter path than DFS
+    2. ___
+    3. Depth-limited minimax can arrive at a decision more quickly because it explores fewer states
+    4. 5
+'''
