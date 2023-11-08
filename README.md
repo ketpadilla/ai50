@@ -1,4 +1,4 @@
-# cs50AIPortfolio
+# ai50
 A Personal Portfolio of CS50AI’s Laboratories and Problem Sets (2022-2023)
 
 <!--- Description ---> 
