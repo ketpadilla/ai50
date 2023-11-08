@@ -159,7 +159,73 @@ class QueueFrontier(StackFrontier):
     h(n):
     estimates the cost of the cheapest path from the state at node "n" to a goal state
 
+    Manhattan Distance 
+    - calculates the distance between two vectors along axes at right angles, ignoring any features
+    - sum of distances between x and y coordinates
+
+    For Greedy Best-First Search: first expands the node with the smallest value of its heuristic function
+        • quality of algorithm will depend on the quality of its heuristic 
+        • may not always find the optimal solution as it finds the optimal choice locally (hence greedy)
 '''
 
-## ! 56:02
-# https://learning.edx.org/course/course-v1:HarvardX+CS50AI+1T2020/block-v1:HarvardX+CS50AI+1T2020+type@sequential+block@a52582b244c849289b4745d601fa6d43/block-v1:HarvardX+CS50AI+1T2020+type@vertical+block@c52e9c5a2ffc4c658dbf2ead90eca070
+## * A* Search
+# algorithm that uses a heuristic function h(n) and cost function g(n)
+'''
+    • g(n) - cost to reach current node
+    • h(n) - estimated cost/distance to goal
+
+    first expands the node with the lowest value of g(n) + h(n)
+
+    only optimal if:
+    1. h(n) is admissible; never overestimate
+    2. h(n) is consistent [h(n) of current state should not be greater than h(n) + g(n) of the next state
+
+    alternatives exists that uses less memory 
+'''
+
+## * Adversarial Search
+# algorithm faces another agent with the opposite goal
+'''
+    possible outcomes:
+        - -1 (opponent wins)
+        - 0 (tie)
+        - 1 (user wins)
+'''
+
+## * Minimax
+# recursive algorithm that simulates all possible choices (between all participating agents) that take place from a current state until a terminal state is reached and choices the one with the desired outcome
+'''
+    Max - aims to maximize score
+    Min - aims to minimize score
+
+    e.g., TicTacToe (classes req.)
+        S0 - initial state
+        Player(s) - returns which player to move in state s
+        Actions(s) - returns legal moves in state s
+        Result(s,a) - returns state after action a taken in state s
+        Terminal(s) - check if state s is a terminal state (when a player reaches their goal)
+        Utility(s) - final numerical value for terminal state s
+
+    • Result(s,a) is the transition model
+
+    • Given a state s, MAX picks action a in Actions(s) that produces the highest value of Min-Value(Result(s,a)) : vice versa for MIN
+        - MAX/MIN considers the result its counterpart will choose
+'''
+
+## * Alpha-Beta Pruning
+# optimizes Minimax by skipping recursive computations that are decidedly unfavorable
+'''
+    MAX: skips nodes when current node (beta) is less than saved node (alpha); saves for the reversed condition
+    
+    MIN: skips nodes when current node (beta) is greater than saved node (alpha); saves for the reversed condition  
+'''
+
+## * Depth-Limited Minimax
+# sets a limit of steps to look into to reduce computation load and uses an evaluation function to determine most optimal step
+'''
+    evaluation function - estimates the expected utility of the game from a given state
+
+    • quality of algorithm depends on the quality of the evaluation function
+'''
+
+## ! Search algorithms - used when AI is tasked to make a decision
