@@ -56,9 +56,11 @@
 ## * Model
 # assignment of truth values (true or false) to all proposition symbols in a knowledge base
 # equates to a "possible world"
+    # reger to tables above for examples
 
-## * Knowledge Base
+## * Knowledge Base (KB)
 # a set of sentences known by a knowledge-based agent to be true (or false)
+# sentences combined via proprositional logic
 
 ## * Entailment (|=)
 # a |= b (alpha entails beta)
@@ -66,5 +68,109 @@
 
 ## * Inference
 # the process of deriving new sentences from old ones
-# !! 19:02
+'''
+    INFERENCE ALGORITHM
+        answers questions about entailment
+        aims to determine if KB |= alpha (query)
 
+    MODEL CHECKING
+        enumerate all possible models
+        checks where KB and alpha are true in all models, if it exists, then KB |= alpha
+        * inefficient for large knowledge bases
+'''
+
+## * Application
+''' 
+    Create a class for:
+        • sentences (to use as a data type)
+        • symbols (P, Q, etc.) (can only be true or false)
+        • logical connections (Not, And, etc.)
+        • algorithm that takes in knowledge and query (model checking)
+
+    Knowledge is declared as a variable with value type Sentence
+        e.g, knowledge = And(Or(P, Q), Not(R), ...)
+    
+    Query is declared as a variable with value type Sentence
+
+    Loops may be used to declare multiple sentences of similar structure
+        e.g., Each person belongs to a house:
+            for person in people:
+                knowledge.add(Or(
+                    Symbol(f"{person}Gryffindor"),
+                    Symbol(f"{person}Hufflepuff"),
+                    Symbol(f"{person}Ravenclaw"),
+                    Symbol(f"{person}Slytherin")
+                ))
+'''
+
+## * Knowledge Engineering
+# process of determining the logical symbols to use on sentences to encode knowledge
+
+## * INFERENCE RULES
+# rules that allows to use existing knowledge to derive new knowledge
+    # premise (existing knowledge)
+    # conclusion (new knowledge after applying logic)
+# alternative to model checking
+'''
+    MODUS PONENS (application of implication)
+        if a => b and a is true, then b is true
+        diagram:
+            a => b
+              a
+            ------
+              b
+
+        * does not refer to any specific "world"
+
+    AND ELIMINATION
+        if a ^ b is true, then a is true and b is true
+        diagram:
+            a ^ b
+            ------
+              a
+              b
+
+    DOUBLE NEGATION INTRODUCTION
+        if not not a is true, then a is true
+        diagram:
+            ¬¬a
+            ------
+              a
+
+        e.g., it is not true that it is not raining, thus it is raining
+
+    IMPLICATION ELIMINATION (Convert if-then to or)
+        if a => b, then not a or b
+        diagram:
+            a => b
+            ------
+            ¬a v b
+
+    BICONDITIONAL ELIMINATION (Convert if-and-only-if to and)
+        if a <=> b, then (a => b) ^ (b => a)
+        diagram:
+            a <=> b
+            ------
+            (a => b) ^ (b => a)
+
+    DE MORGAN'S LAWS (convert not-and to or-not and vice versa)
+        not-add -> or: 
+            if not (a ^ b), then not a or not b
+            diagram:
+                ¬(a ^ b)
+                ------
+                ¬a v ¬b
+            
+            e.g., it is not true that it is raining and sunny, thus it is not raining or not sunny
+
+        not-or -> and:
+            if not (a v b), then not a and not b
+            diagram:
+                ¬(a v b)
+                ------
+                ¬a ^ ¬b
+            
+            e.g., it is not true that it is raining or sunny, thus it is not raining and not sunny
+'''
+
+# !! 1:13:40
