@@ -171,6 +171,146 @@
                 ¬a ^ ¬b
             
             e.g., it is not true that it is raining or sunny, thus it is not raining and not sunny
+    
+    DISTRIBUTIVE PROPERTY
+        diagram:
+            a ^ (b v c)
+            ------
+            (a ^ b) v (a ^ c)
+
+            a v (b ^ c)
+            ------
+            (a v b) ^ (a v c)        
 '''
 
-# !! 1:13:40
+## * KNOWELEDGE PROBLEMS
+# sentences can be treated as states
+# * can be solved using search algorithms
+'''
+    Initial State: starting knowledge base
+    Actions: inference rules
+    Transition Model: New knowledge base after interence
+    Goal Test: check statement with entailment
+    Path Cost: number of steps in proof
+
+''' 
+
+## * RESOLUTION
+# based on unit resolution rules
+'''
+    uses complementary literals (sentencecs with opposite truth values) to derive new knowledge
+
+    * following symbols can represent combined sentences
+    
+    RULE 1
+    diagram:
+        a v b
+         ¬a
+        -----
+          b
+    
+
+    RULE 2
+    diagram:
+        a v b
+        ¬a v c
+        ------
+        b v c
+'''
+
+## * Clause
+# a disjunction of literals 
+# e.g., (P v Q v ¬R)
+
+## * Literal
+# a propositional symbol or its negation
+
+## * Conjunctive Normal Form (CNF)
+# logical sesntence that is a conjunction of clauses
+# e.g., (P v Q v ¬R) ^ (¬P v R) ^ (¬Q v R)
+# any sentence can be converted to CNF
+''' Conversion
+    STEPS:
+        1. Eliminate biconditionals (use biconditional elimination)
+        2. Eliminate implications (use implication elimination)
+        3. Move negation inwards (use de morgan's laws)
+        4. Use distributive property to distribute "v" and "^"
+
+    e.g., (P v Q) => R
+        -> ¬(P v Q) v R         (implication elimination)
+        -> (¬P ^ ¬Q) v R        (de morgan's laws)
+        -> (¬P v R) ^ (¬Q v R)  (distributive property)
+'''
+
+## ! INFERENCE BY RESOLUTION
+# process of using resolution rules to derive new clauses
+# uses CNF clauses as inputs
+'''
+
+    BASIS: resolve contradictory terms after converting sentences to CNF
+
+    e.g., 
+        P v Q v S
+        ¬P v R v S
+        -----------
+        Q v R v S
+
+        * duplicate clauses are removed/merged
+
+    e.g., 
+         P
+        ¬P
+        ---
+        ()
+
+        * "()" represents nothing; equates to false
+
+    TO DETERMINE IF KB |= a:
+        BASIS: Check if (KB ^ ¬a) is a contradiction (prove by contradiction)
+            - if so, then KB |= a
+            - otherwise, no entailment
+
+        ALGORITHM:
+            • Convert (KB ^ ¬a) to CNF
+            • Keep checking to see if new clauses can be produced from resolution
+                • If "()" is produced, contradiction exists and KB |= a
+                • Otherwise, no entailment
+            
+            * resolution: choose two clauses, resolve, and add to KB
+'''
+
+## * FIRST-ORDER LOGIC
+# more powerful than propositional logic
+'''
+    adds two new types of symbols
+
+    CONSTANTS
+        - represent specific objects
+        - e.g., Harry, Sally, Ravenclaw etc.
+
+    PREDICATES 
+        - represent relations between objects
+        - similar to relations/functions
+        - may be true or false
+        - e.g., Person, Houses, Belongs To, etc.
+
+    e.g., Person(Minerva), House(Gryffindor), BelongsTo(Minerva, Gryffindor)
+
+    additional features:
+    QUANTIFIERS
+        1. universal quantification (∀x)
+            - true/false for all objects
+
+            e.g., ∀x BelongsTo(x, Gryffindor) => ¬BelongsTo(x, Slytherin)
+
+        2. existential quantification (∃x)
+            - true/false for at least one object
+
+            e.g., ∃x House(x) ^ BelongsTo(Minerva, x)
+
+        e.g., ∀x. Person(x) => (∃y. House(y) ^ BelongsTo(x, y))
+            For all people x, there exists a house y that they belong to x
+            (i.e., Everyone belongs to a house)
+'''
+
+## ! CONVERT KNOWLEDGE INTO LOGIC FORM TO GAIN INFERENCES FROM KNOWLEDGE ALGORITHMS
