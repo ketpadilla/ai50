@@ -2,7 +2,6 @@
 Tic Tac Toe Player
 """
 
-import math
 import copy
 
 X = "X"
@@ -28,15 +27,19 @@ def player(board):
     xCount, oCount = 0, 0
 
     # Check the board for the number of X's and O's
-    for row in board:
-        for cell in row:
-            if cell == X:
+    for i in range(0, len(board)):
+        for j in range(0, len(board[0])):
+            if board[i][j] == X:
                 xCount += 1
-            elif cell == O:
+            elif board[i][j] == O:
                 oCount += 1
     
-    # Determine who's turn it is
-    return X if not terminal(board) and xCount == oCount else O if xCount > oCount else None
+    # Check if it is X's turn
+    if xCount > oCount:
+        return O
+
+    # Else, it is O's turn
+    return X
 
 
 def actions(board):
@@ -48,10 +51,12 @@ def actions(board):
     possibleActions = set()
 
     # Check the board for empty places
-    for i in range(3):
-        for j in range(3):
+    for i in range(0, len(board)):
+        for j in range(0, len(board[0])):
             if board[i][j] == EMPTY:
                 possibleActions.add((i, j))
+
+    # Return the set of possible actions
     return possibleActions
 
 
@@ -59,20 +64,14 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-
-    # Check if the action is valid
-    if action not in actions(board):
-        raise Exception("Invalid action")
     
-    # Check if the game is over
-    if terminal(board):
-        raise Exception("Game over")
-
     # Create a copy of the board
     newBoard = copy.deepcopy(board)
 
     # Make a move 
     newBoard[action[0]][action[1]] = player(board)
+
+    # Return the new board
     return newBoard
 
 
@@ -81,91 +80,25 @@ def winner(board):
     Returns the winner of the game, if there is one.
     """
 
-    # Check if X won
-    if checkRows(board, X) or checkCols(board, X) or checkDiagonals(board, X):
-        return X
-    
-    # Check if O won
-    if checkRows(board, O) or checkCols(board, O) or checkDiagonals(board, O):
-        return O
+    # Check rows
+    for row in board:
+        if all(i == row[0] for i in row):
+            return row[0]
+    # Check columns
+    for col in range(3):
+        if all(row[col] == board[0][col] for row in board):
+            return board[0][col]
 
-    # If no winner is found, return None
+    # Check main diagonal
+    if all(board[i][i] == board[0][0] for i in range(3)):
+        return board[0][0]
+
+    # Check reverse diagonal
+    if all(board[i][2 - i] == board[0][2] for i in range(3)):
+        return board[0][2]
+    
+    # If there is no winner, return None
     return None
-
-
-def checkRows(board, player):
-    """
-    Returns True if the player has won in any row, False otherwise.
-    """
-
-    # Iterate over the rows
-    for row in range(len(board)):
-        count = 0
-        for col in range(len(board[0])):
-            if board[row][col] == player:
-                count += 1
-        if count == len(board):
-            return True
-    return False
-
-
-def checkCols(board, player):
-    """
-    Returns True if the player has won in any column, False otherwise.
-    """
-
-    # Iterate over the columns
-    for col in range(len(board[0])):
-        count = 0
-        for row in range(len(board)):
-            if board[row][col] == player:
-                count += 1
-        if count == len(board):
-            return True
-    return False
-
-
-def checkDiagonals(board, player):
-    """
-    Returns True if the player has won in any diagonal, False otherwise.
-    """
-
-    # Check the main diagonal
-    count = 0
-    for i in range(len(board)):
-        if board[i][i] == player:
-            count += 1
-    if count == len(board):
-        return True
-
-    # Check the other diagonal
-    count = 0
-    for i in range(len(board)):
-        if board[i][len(board) - i - 1] == player:
-            count += 1
-    if count == len(board):
-        return True
-
-    # If no diagonal is found, return False
-    return False
-
-
-def tie(board):
-    """
-    Returns 0 if the game is a tie
-    """
-
-    # Initialize the count
-    count = (len(board * len(board[0])))
-    
-    # Iterate over rows and columns
-    for row in range(len(board)):
-        for col in range(len(board[0])):
-            if board[row][col] is not EMPTY:
-                count -= 1
-    
-    # Return tie
-    return count == 0
 
 
 def terminal(board):
@@ -173,8 +106,12 @@ def terminal(board):
     Returns True if game is over, False otherwise.
     """
 
-    # Check if the game is over
-    if winner(board) or tie(board):
+    # Check if there is a winner
+    if winner(board) is not None:
+        return True
+    
+    # Check if there are any empty places left
+    if not any(EMPTY in sublist for sublist in board) and winner(board) is None:
         return True
         
     # Return False if the game is not over
@@ -186,6 +123,10 @@ def utility(board):
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
 
+    # Check if the game is not over
+    if not terminal(board):
+        return None
+        
     # Check ir X won
     if winner(board) == X:
         return 1
@@ -207,28 +148,15 @@ def minimax(board):
     if terminal(board):
         return None
     
-    # Initialize value
-    value = float("-inf")
-
     # Check if it is X's turn
     if player(board) == X:
-        for action in actions(board):
-            minResult = minValue(result(board, action))
-            if minResult > value:
-                value = minResult
-                selectedAction = action
-        
-        return selectedAction
-    
+        value, move = maxValue(board)
+
     # Check if it is O's turn
     if player(board) == O:
-        for action in actions(board):
-            maxResult = maxValue(result(board, action))
-            if maxResult < value:
-                value = maxResult
-                selectedAction = action
+        value, move = minValue(board)
         
-        return selectedAction
+    return move
 
 
 def maxValue(board):
@@ -238,17 +166,23 @@ def maxValue(board):
 
     # Check if the game is over
     if terminal(board):
-        return utility(board)
-    
-    # Initialize the value
-    value = -math.inf
+        return utility(board), None
 
-    # Iterate over the actions
+    # Initialize the value and move
+    value = float('-inf')
+    move = None
+
     for action in actions(board):
-        value = max(value, minValue(result(board, action)))
-    
-    # Return the value
-    return value
+        aux, act = minValue(result(board, action))
+        # Check if the value is greater than the current value
+        if aux > value:
+            value = aux
+            move = action
+        # Check if "X" won
+        if value == 1:
+            return value, move
+
+    return value, move
 
 
 def minValue(board):
@@ -258,14 +192,20 @@ def minValue(board):
 
     # Check if the game is over
     if terminal(board):
-        return utility(board)
+        return utility(board), None
     
-    # Initialize the value
-    value = math.inf
+    # Initialize the value and move
+    value = float('inf')
+    move = None
 
-    # Iterate over the actions
     for action in actions(board):
-        value = min(value, maxValue(result(board, action)))
-    
-    # Return the value
-    return value
+        aux, act = maxValue(result(board, action))
+        # Check if the value is less than the current value
+        if aux < value:
+            value = aux
+            move = action
+        # Check if "O" won
+        if value == -1:
+            return value, move
+
+    return value, move
