@@ -91,7 +91,7 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
-    
+
     start = Node(source, None, None) # initialize initial state
     frontier = QueueFrontier() # initialize frontier to empty queue
     frontier.add(start) # add initial state to frontier
@@ -130,6 +130,8 @@ def shortest_path(source, target):
 
         # Mark node as explored
         explored.add(node.state)
+    
+        return
 
 
 def person_id_for_name(name):
