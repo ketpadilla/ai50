@@ -147,5 +147,137 @@
         P(A) = P(A|B) * P(B) + P(A|¬B) * P(¬B)
 '''
 
-#! 49:13
+## * BAYESIAN NETWORK
+# a probabilistic model
+# data structure that represents the dependencies (joint probability) among random variables
+'''
+    Characteritics
+        • a directed graph
+        • each node represents a random variable
+        • arrow from X to Y means X is a parent of Y
+            -> P(X|Parents(X))
+
+    e.g.,
+                        Rain
+                {none, light, heavy}
+                    |           |
+                    v           |
+                Maintenance     |
+                 {yes, no}      |
+                    |           |   
+                    v           V
+                        Train
+                 {on time, delayed}
+                          |
+                          V
+                      Appointment
+                    {attend, miss}
+        
+                
+        * Appointment is dependent on Train which is dependent on Rain and Maintenance which is also dependent on Rain
+            let P(Rain) = {0.7, 0.2, 0.1}   <- an unconditional probability distribution as it has no parents 
+
+        * the rest are conditional probability distributions as they have parents
+            let P(Maintenance):
+                Rain    |   yes     |   no
+                none    |   0.4     |   0.6
+                light   |   0.2     |   0.8
+                heavy   |   0.1     |   0.9
+            
+            let P(Train):
+                Rain    |   Maintenance |   on time     |   delayed
+                none    |   yes         |   0.8         |   0.2
+                none    |   no          |   0.9         |   0.1
+                light   |   yes         |   0.6         |   0.4
+                light   |   no          |   0.7         |   0.3
+                heavy   |   yes         |   0.4         |   0.6
+                heavy   |   no          |   0.5         |   0.5
+
+            let P(Appointment):
+                Train   |   attend  |   miss
+                on time |   0.9     |   0.1
+                delayed |   0.6     |   0.4 
+
+
+        COMPUTING JOINT PROBABILITIES
+            ? P(light, no) = P(light) * P(no|light)
+                           = 0.2 * 0.8
+                           = 0.16
+
+            ? P(light, no, delayed) = P(light) * P(no|light) * P(delayed|light, no)
+                                    = 0.2 * 0.8 * 0.3
+                                    = 0.048
+            
+            ? P(light, no, delayed, miss) = P(light) * P(no|light) * P(delayed|light, no) * P(miss|delayed)
+                                          = 0.2 * 0.8 * 0.3 * 0.4
+                                          = 0.0192        
+'''
+
+## * INFERENCE WITH PROBABILITY
+'''
+    Characteritics of Inference Probability Problems
+        1. Query X: computes distribution
+        2. Evidence E: observed variables for event e
+        3. Hidden variables Y: non-evidence and non-query variables (inaccessible)
+        4. Goal: Calculate P(X|e)
+
+        e.g.,
+            [hidden variable: maintenance and train]
+                                ? P(Appointment|light, no)             
+            []                       = a * P(Appointment, light, no)
+            [marginalization]        = a * [P(Appointment, light, no, on time) + P(Appointment, light, no, delayed)]
+    
+    INFERENCE BY ENUMERATION
+        P(X|e) = a * P(X, e) = a * ∑ P(X, e, y) for all y
+    
+    POMEGRANATE
+    a Python library for probabilistic modeling that uses Bayesian networks
+
+        • Node() - creates a node/variable
+        • DiscreteDistribution() - creates an unconditional probability distribution
+        • ConditionalProbabilityTable() - creates a conditional probability distribution   
+        • BayesianNetwork() - creates a Bayesian network
+        • .add_states() - adds nodes to a Bayesian network
+        • .add_edge() - adds edges to a Bayesian network 
+        • .bake() - finalizes the structure of a Bayesian network
+        • .probability() - calculates the probability of a given set of events where all events are known
+        • .predict_proba() - calculates the probability of a given set of events where one or more events are unknown
+'''
+
+## * APPROXIMATE INFERENCE
+# to approximate the inference procedure
+'''
+    SAMPLING
+    takes samples of all of the nodes in a Bayesian network to calculate the probability of the query node 
+
+    REJECTION SAMPLING
+    to eliminate samples that do not match the evidence and calculate the probability of the query node with the remaining samples
+
+    * more samples = more accurate probability
+
+    LIKELIHOOD WEIGHTING
+    to create samples based on the evidence variables to calculate the probability of the query node
+        1. fix the values for evidence variables
+        2. sample the non-evidence variables using their conditional probability distributions in the Bayesian network
+        3. weight each sample by its likelihood: the probability of all the evidence
+'''
+
+## * MARKOV MODELS
+# a probabilistic model
+# used to predict future events 
+'''
+    provides a random variable for each time step
+        e.g., xt : weather at time t
+
+    MARKOV ASSUMPTION
+    to assume that the current state depends on only a finite fixed number of previous states
+        e.g., today's weather depends only on yesterday's weather
+
+    MARKOV CHAIN
+    a sequence of random variables where their distribution follows the Markov assumption
+
+    
+'''
+
+
 
