@@ -276,8 +276,67 @@
     MARKOV CHAIN
     a sequence of random variables where their distribution follows the Markov assumption
 
+    TRANSITION MODEL
+    a probability distribution that describes the probability of each state given the previous state
+        e.g.,
+                                Tomorrow's Weather (xt+1)
+                        -------------------------------------
+                        |           |   Sunny   |   Rainy   |
+                        -------------------------------------
+        Today's Weather |   Sunny   |   0.8     |   0.2     |
+            (xt)        |   Rainy   |   0.3     |   0.7     |
+                        -------------------------------------
     
+    PROMOGRANATE (Markov Models)
+    *  "Start" state uses DiscreteDistribution()
+    *  "Transition" model use ConditionalProbabilityTable()
+
+        • MarkovChain() - creates a Markov chain
+        • .sample() - create samples from a Markov chain
 '''
+
+## * SENSOR MODELS
+# used to determine the hidden state given observations
+'''
+    e.g.,
+        Hidden State    |   Observation
+        words spoken    |   audio waveforms
+        user engagement |   website analytics
+    
+    HIDDEN MARKOV MODEL
+    a Markov model with hidden states that generate some observed event
+
+    SENSOR MODEL
+    a probability distribution that describes the probability of each observation given the hidden state
+        e.g.,
+                                        Observation (Et)
+                        ---------------------------------------------
+                        |           |   Umbrella  |   No Umbrella   |
+                        ---------------------------------------------
+            State       |   Sunny   |   0.2       |   0.8           |
+             (xt)       |   Rainy   |   0.9       |   0.1           |
+                        ---------------------------------------------
+
+    SENSOR MARKOV ASSUMPTION
+    to assume that the evidence variable depends only on the corresponding hidden state
+
+    TASKS INVOVLED
+        1. filtering - given observations from start until now, calculate the distribution for the current state
+        2. prediction - given observations from start until now, calculate the distribution for a future state
+        3. smoothing - given observations from start until now, calculate the distribution for a past state
+        4. most likely explanation - given observations from start until now, calculate the most likely sequence of hidden states
+
+    PROMOGRANATE (Hidden Markov Models)
+    * variable "states" stores the list of hidden states
+    * each hidden states uses DiscreateDistribution(), where the key is the observation and the value is the probability
+    * "transitions" is a numpy array that stores the sensor model (see sensor model)
+    * "starts" is a numpy array that stores the starting probabilities for each hidden state
+
+        • HiddenMarkovModel() - creates a Hidden Markov model
+        • observations - a list of all observed values
+        • .predict() - predicts the most likely sequence of hidden states
+'''
+
 
 
 
