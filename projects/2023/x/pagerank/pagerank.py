@@ -57,7 +57,30 @@ def transition_model(corpus, page, damping_factor):
     linked to by `page`. With probability `1 - damping_factor`, choose
     a link at random chosen from all pages in the corpus.
     """
-    raise NotImplementedError
+
+    # Initialize dictionary for probability distribution
+    probability_distribution = { name: 0 for name in corpus }
+    
+    # If page has no outgoing links, return probability distribution with equal probability for all pages
+    if len(corpus[page]) == 0:
+        for name in probability_distribution:
+            probability_distribution[name] = 1 / len(corpus)
+        return probability_distribution
+    
+    # Initialize probability of picking a random page
+    random_probability = (1 - damping_factor) / len(corpus)
+
+    # Initialize probability of picking a page linked to by the current page
+    linked_probability = damping_factor / len(corpus[page])
+
+    # Add probabilities to probability distribution
+    for name in probability_distribution:
+        probability_distribution[name] += random_probability
+
+        if name in corpus[page]:
+            probability_distribution[name] += linked_probability
+
+    return probability_distribution
 
 
 def sample_pagerank(corpus, damping_factor, n):
@@ -71,14 +94,42 @@ def sample_pagerank(corpus, damping_factor, n):
     """
 
     # Initialize dictionary with page names as keys with initial values of 0
-    pages = {name: 0 for name in corpus}
+    pages = { name: 0 for name in corpus }
 
     # Choose the first page at random
     current_page = random.choice(list(pages))
 
-    #TODO
+    # Iterate n-1 times to sample picking pages
+    for i in range(n - 1):
 
-    raise NotImplementedError
+        # Initialize transition model
+        model = transition_model(corpus, current_page, damping_factor)
+
+        # Pick a page at random 
+        random_page = random.random()
+
+        # Initialize cumulative probability
+        cumulative_probability = 0
+
+        # Iterate through transition model
+        for name, probability in model.items():
+
+            # Add probability to cumulative probability
+            cumulative_probability += probability
+
+            # If cumulative probability is less than or equal to random page, pick that page
+            if cumulative_probability <= random_page:
+                current_page = name
+                break
+
+            # Increment page's value in pages dictionary
+            pages[current_page] += 1
+    
+    # Normalize values in pages dictionary
+    ranks = { name: value / n for name, value in pages.items() }
+
+    # Return ranks
+    return ranks
 
 
 def iterate_pagerank(corpus, damping_factor):
