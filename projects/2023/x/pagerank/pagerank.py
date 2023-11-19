@@ -69,6 +69,15 @@ def sample_pagerank(corpus, damping_factor, n):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
+
+    # Initialize dictionary with page names as keys with initial values of 0
+    pages = {name: 0 for name in corpus}
+
+    # Choose the first page at random
+    current_page = random.choice(list(pages))
+
+    #TODO
+
     raise NotImplementedError
 
 
