@@ -58,28 +58,29 @@ def transition_model(corpus, page, damping_factor):
     a link at random chosen from all pages in the corpus.
     """
 
+    # Initialize number of pages in corpus
+    n = len(corpus)
+
     # Initialize dictionary for probability distribution
     probability_distribution = { name: 0 for name in corpus }
     
     # If page has no outgoing links, return probability distribution with equal probability for all pages
     if len(corpus[page]) == 0:
         for name in probability_distribution:
-            probability_distribution[name] = 1 / len(corpus)
+            probability_distribution[name] = 1 / n
         return probability_distribution
     
     # Initialize probability of picking a random page
-    random_probability = (1 - damping_factor) / len(corpus)
+    random_probability = (1 - damping_factor) / n
 
     # Initialize probability of picking a page linked to by the current page
     linked_probability = damping_factor / len(corpus[page])
 
     # Add probabilities to probability distribution
     for name in probability_distribution:
-        probability_distribution[name] += random_probability
-
-        if name in corpus[page]:
-            probability_distribution[name] += linked_probability
-
+        # Add random probability if page has no outgoing links, otherwise add linked probability
+        probability_distribution[name] += random_probability if name not in corpus[page] else linked_probability
+    
     return probability_distribution
 
 
@@ -96,8 +97,9 @@ def sample_pagerank(corpus, damping_factor, n):
     # Initialize dictionary with page names as keys with initial values of 0
     pages = { name: 0 for name in corpus }
 
-    # Choose the first page at random
+    # Choose the first page at random and increment its value in pages dictionary
     current_page = random.choice(list(pages))
+    pages[current_page] += 1
 
     # Iterate n-1 times to sample picking pages
     for i in range(n - 1):
@@ -117,8 +119,8 @@ def sample_pagerank(corpus, damping_factor, n):
             # Add probability to cumulative probability
             cumulative_probability += probability
 
-            # If cumulative probability is less than or equal to random page, pick that page
-            if cumulative_probability <= random_page:
+            # If cumulative probability is greater than or equal to random page, pick that page
+            if cumulative_probability >= random_page:
                 current_page = name
                 break
 
@@ -126,7 +128,7 @@ def sample_pagerank(corpus, damping_factor, n):
             pages[current_page] += 1
     
     # Normalize values in pages dictionary
-    ranks = { name: value / n for name, value in pages.items() }
+    ranks = { name: (value / n) for name, value in pages.items() }
 
     # Return ranks
     return ranks
@@ -141,7 +143,57 @@ def iterate_pagerank(corpus, damping_factor):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    raise NotImplementedError
+
+    # Initialize number of pages in corpus
+    n = len(corpus)
+    # Initialize initial ranks
+    rank = 1 / n
+    # Initialize random probability
+    random_probability = (1 - damping_factor) / n
+
+    # Initialize dictionary with page names as keys with initial ranks
+    pages = { name: rank for name in corpus }
+
+    # Initialize dictionary for new ranks
+    new_pages = { name: 0 for name in corpus }
+
+    # Iterate until convergence
+    i = 0; max_rank = rank
+    while max_rank > 0.001:
+        i += 1; max_rank = 0
+
+        # Iterate through pages
+        for name in corpus:
+            # Initialize surfer probability
+            surfer_probability = 0
+            # Iterate through pages that link to current page
+            for next_page in corpus:
+                # If page has no link, pick a random page
+                if len(corpus[next_page]) == 0:
+                    surfer_probability += pages[next_page] * rank
+                
+                # If page links to current page, pick a link at random
+                if name in corpus[next_page]:
+                    surfer_probability += pages[next_page] / len(corpus[next_page])
+
+            # Calculate new rank
+            new_pages[name] = random_probability + (damping_factor * surfer_probability)
+        
+        # Normalize new ranks
+        new_pages = { name: value / sum(new_pages.values()) for name, value in new_pages.items() }
+
+        # Find max change
+        for name in corpus:
+            # Calculate change
+            change = abs(pages[name] - new_pages[name])
+            # Update max change
+            max_rank = change if change > max_rank else max_rank
+
+        # Update page ranks to new ranks
+        pages = new_pages.copy()
+
+    # Return page ranks
+    return pages
 
 
 if __name__ == "__main__":
