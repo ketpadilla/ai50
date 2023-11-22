@@ -22,5 +22,11 @@
 # * take a state, maintaining some current node, and move in a state-space landscape to find a global maximum/minimum
 
 ## * HILL CLIMBING
+# to move to a neighboring state with a lower/higher value
+'''
+
+
+
+'''
 
 #! 7:35
