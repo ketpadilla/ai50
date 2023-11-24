@@ -190,7 +190,14 @@ class CrosswordCreator():
         Return True if `assignment` is complete (i.e., assigns a value to each
         crossword variable); return False otherwise.
         """
-        raise NotImplementedError
+
+        for key in self.domains.keys(): # for each variable
+            if key not in assignment.keys() or assignment[key] is None:
+                # if the variable is not in the assignment or the value is None
+                return False
+        
+        return True # if all variables are in the assignment
+
 
     def consistent(self, assignment):
         """
@@ -198,6 +205,7 @@ class CrosswordCreator():
         puzzle without conflicting characters); return False otherwise.
         """
         raise NotImplementedError
+
 
     def order_domain_values(self, var, assignment):
         """
@@ -227,6 +235,10 @@ class CrosswordCreator():
 
         If no assignment is possible, return None.
         """
+
+        if self.assignment_complete(assignment):
+            return assignment
+        
         raise NotImplementedError
 
 
