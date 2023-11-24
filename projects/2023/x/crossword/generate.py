@@ -204,7 +204,32 @@ class CrosswordCreator():
         Return True if `assignment` is consistent (i.e., words fit in crossword
         puzzle without conflicting characters); return False otherwise.
         """
-        raise NotImplementedError
+
+        values = [] # List of values in the assignment
+        for key, value in assignment.items(): 
+            # for each variable and value in the assignment
+            if value in values: 
+                # false if the value is already in the list of values
+                return False
+
+            if key.length != len(value): 
+                # false if lengths are not equal
+                return False
+            
+            values.append(value) # add the value to the list of values
+            neighbours = self.crossword.neighbors(key) # get variable's neighbours
+            
+            for neighbour in neighbours: 
+                # for each neighbour
+                overlap = self.crossword.overlaps[key, neighbour] # get overlap
+                
+                if neighbour in assignment: 
+                    # if the neighbour is in the assignment
+                    if assignment[neighbour][overlap[1]] != value[overlap[0]]:
+                        # if the overlap is not consistent
+                        return False
+            
+        return True # if all values are consistent
 
 
     def order_domain_values(self, var, assignment):
@@ -216,6 +241,7 @@ class CrosswordCreator():
         """
         raise NotImplementedError
 
+
     def select_unassigned_variable(self, assignment):
         """
         Return an unassigned variable not already part of `assignment`.
@@ -225,6 +251,7 @@ class CrosswordCreator():
         return values.
         """
         raise NotImplementedError
+
 
     def backtrack(self, assignment):
         """
@@ -237,7 +264,12 @@ class CrosswordCreator():
         """
 
         if self.assignment_complete(assignment):
+            # if the assignment is complete, return the assignment
             return assignment
+        
+
+        
+
         
         raise NotImplementedError
 
