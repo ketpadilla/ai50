@@ -122,7 +122,25 @@ class CrosswordCreator():
         False if no revision was made.
         """
 
-        raise NotImplementedError
+        overlap = self.crossword.overlaps[x, y] # Get the overlap
+
+        if overlap is None: # If they don't overlap, return False
+            return False
+        
+        i, j = overlap[0], overlap[1] # Get the indices of the overlap
+        remove = [] # List of words to remove
+
+        for word_x in self.domains[x]: # for each word in the domain x
+            for word_y in self.domains[y]: # for each word in the domain y
+                if word_x[i] == word_y[j]:
+                    break # if the words overlap, break
+
+                remove.append(word_x) # add the word to the list of words to remove
+                
+        for word in remove: # remove the words
+            self.domains[x].remove(word)
+
+        return True
 
 
     def ac3(self, arcs=None):
@@ -134,7 +152,9 @@ class CrosswordCreator():
         Return True if arc consistency is enforced and no domains are empty;
         return False if one or more domains end up empty.
         """
+        
         raise NotImplementedError
+    
 
     def assignment_complete(self, assignment):
         """
