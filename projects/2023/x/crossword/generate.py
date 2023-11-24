@@ -153,7 +153,36 @@ class CrosswordCreator():
         return False if one or more domains end up empty.
         """
         
-        raise NotImplementedError
+        queue = [] # List of arcs to check
+
+        if arcs is None: # no arcs given
+            for x in self.domains.keys():
+                for y in self.domains.keys():
+                    if x != y:
+                        queue.append((x, y)) # add all arcs to queue
+        
+        if arcs is not None: # arcs given
+            for arc in arcs:
+                queue.append(arc) # add all arcs to queue
+        
+        while queue is not None: # while there are arcs to check
+            for x, y in queue: 
+                arc = (x, y) # get an arc
+                break
+
+            if arc is not None:
+                x, y = arc[0], arc[1] # get the variables
+    
+                if self.revise(x, y): # if the arc is revised
+                    if len(self.domains[x]) == 0: # if the domain is empty
+                        return False
+                    
+                    for z in self.crossword.neighbors(x): # for each neighbor of x
+                        if z != y:
+                            queue.append((z, x)) # add the arc to the queue
+            break
+
+        return True
     
 
     def assignment_complete(self, assignment):
