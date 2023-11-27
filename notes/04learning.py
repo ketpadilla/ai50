@@ -113,7 +113,75 @@
 # penalizes more complex hypotheses, favoring simpler, more general ones
 # helps prevent overfitting
 '''
-    cost(h) = loss(h) + y*complexity(h)
+    adds a regularization term to the loss function
+        • lambda -> y; regularization parameter
+        • complexity(h) -> complexity of hypothesis function h
 
+    HOLDOUT CROSS-VALIDATION
+    splits data set into:
+        1. training set - where learning occurs
+        2. testing set - where evaluation occurs
+
+    K-FOLD CROSS-VALIDATION
+    splits data into k sets
+    experiments k times, using each set as a test set once and the rest as training sets
 '''
-#! 56:20
+
+## * SCIKIT-LEARN
+# a machine learning library for Python
+
+## * REINFORCEMENT LEARNING
+# an agent that learns what actions to take in an environment based on rewards and punishments
+'''
+    MARKOV DECISION PROCESS
+    model for decision-making, consisting of:
+        1. states -> s
+        2. actions -> ACTIONS(s)
+        3. transition model -> P(s' | s, a)
+        4. reward function -> R(s, a, s')
+'''
+
+## * Q-LEARNING
+# to learn a function -> Q(s, a) that estimates the value of taking action a in state s
+'''
+    Overview
+        1. initialize Q(s, a) to 0 for all s, a
+        2. when action is taken and reward is received:
+            • Estimate the value of Q(s, a) using current and expected future rewards
+            • Update Q(s, a) to take into account old and new estimates
+
+            -> Q(s,a) = Q(s,a) + a(new estimate - old estimate)
+            -> Q(s,a) = Q(s,a) + a((r + y*max(Q(s',a')) - Q(s,a))
+    
+
+    EXPLORE-EXPLOIT TRADEOFF
+        Explore - explores unknown information to maximize reward
+        Exploit - uses known information to maximize reward
+
+        * AI that only exploits may miss out on better rewards
+    
+    E-GREEDY
+    set e (epsilon) to how often to explore (choose random action)
+        • set probability e - 1 to exploit (choose estimated best action)
+    
+    FUNCTION APPROXIMATION
+    approximates Q(s, a) using a function than storing a value for every state-action pair
+        • reduces memory usage from training data
+'''
+
+## * UNSUPERVISED LEARNING
+# given input data without labels, to learn patterns and structure
+
+## * CLUSTERING
+# group a set of objects with similar objects in the same group
+'''
+    Applications:
+        1. Genetic research
+        2. Image segmentation
+        3. Market research
+        4. Medical imaging
+        5. Social network analysis
+'''
+
+## * K-MEANS CLUSTERING
+# group data points into k clusters, reassigning points to the closest cluster center, repeating until convergence
