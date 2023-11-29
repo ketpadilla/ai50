@@ -70,7 +70,7 @@ def load_data(filename):
     with open(filename) as f: # open file
         reader = csv.DictReader(f) # read file
         for row in reader: # for each row
-            evidence.append([ # add data to evidence list
+            evidence.append([ # add the following data to evidence list
                 int(row["Administrative"]), 
                 float(row["Administrative_Duration"]),
                 int(row["Informational"]),
@@ -91,8 +91,6 @@ def load_data(filename):
             ])
 
             labels.append(1 if row["Revenue"] == "TRUE" else 0) # add revenue to labels list
-
-    #
     return evidence, labels # return tuples
 
 
