@@ -62,6 +62,11 @@ def load_data(filename):
 
     evidence, labels = list(), list() # initialize lists
 
+    month_index = { # dictionary for month index (alternative: datetime library)
+        'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'June': 5, 
+        'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+    }
+
     with open(filename) as f: # open file
         reader = csv.DictReader(f) # read file
         for row in reader: # for each row
@@ -76,7 +81,7 @@ def load_data(filename):
                 float(row["ExitRates"]),
                 float(row["PageValues"]),
                 float(row["SpecialDay"]),
-                int(row["Month"]),
+                int(month_index[(row["Month"])]),
                 int(row["OperatingSystems"]),
                 int(row["Browser"]),
                 int(row["Region"]),
@@ -86,6 +91,8 @@ def load_data(filename):
             ])
 
             labels.append(1 if row["Revenue"] == "TRUE" else 0) # add revenue to labels list
+
+    #
     return evidence, labels # return tuples
 
 
