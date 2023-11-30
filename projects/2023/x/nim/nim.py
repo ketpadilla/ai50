@@ -101,7 +101,11 @@ class NimAI():
         Return the Q-value for the state `state` and the action `action`.
         If no Q-value exists yet in `self.q`, return 0.
         """
-        raise NotImplementedError
+
+        if (tuple(state), action) not in self.q:
+            return 0 # return 0 for no Q-value
+        
+        return self.q[(tuple(state), action)] # return the Q-value
 
     def update_q_value(self, state, action, old_q, reward, future_rewards):
         """
@@ -118,7 +122,8 @@ class NimAI():
         `alpha` is the learning rate, and `new value estimate`
         is the sum of the current reward and estimated future rewards.
         """
-        raise NotImplementedError
+
+        self.q[(tuple(state), action)] = old_q + self.alpha * (reward + future_rewards - old_q) # update Q-value
 
     def best_future_reward(self, state):
         """
@@ -130,7 +135,19 @@ class NimAI():
         Q-value in `self.q`. If there are no available actions in
         `state`, return 0.
         """
-        raise NotImplementedError
+        
+        actions = Nim.available_actions(state) # get available actions
+
+        if len(actions) == 0:
+            return 0 # return 0 if no available actions
+        
+        max_q = 0 # best future reward
+        for action in actions:
+            q = self.q.get((tuple(state), action), 0) # get current reward
+            q = q if q else 0 # if reward exists, use it, otherwise use 0
+            if q > max_q: # if current reward is better than best future reward
+                max_q = q # update best future reward
+        return max_q
 
     def choose_action(self, state, epsilon=True):
         """
@@ -147,8 +164,23 @@ class NimAI():
         If multiple actions have the same Q-value, any of those
         options is an acceptable return value.
         """
-        raise NotImplementedError
 
+        actions = Nim.available_actions(state) # get available actions
+
+        if epsilon and random.random() <= self.epsilon: # if using epsilon and random number is less than epsilon
+            return random.choice(list(actions))
+        
+        max_a, max_q = None, None # best action and reward
+
+        for action in actions: # for each action
+            q = self.q.get((tuple(state), action)) # get reward
+            q = q if q else 0 # 0 if None
+
+            if max_q == None or q > max_q:
+                # update best action and reward if current reward is better
+                max_a, max_q = action, q
+        return max_a
+            
 
 def train(n):
     """
