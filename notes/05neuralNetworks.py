@@ -49,6 +49,31 @@
   calculates gradient based on a subset of data points (during iteration)
   -> time complexity: O(n)
   -> more accurate than stochastic gradient descent but less accurate than gradient descent
+
+  * activation functions can be used to output probabilities that can be used to classify data (i.e., supervised learning)
 '''
 
-## ! 24:06
+## * PERCEPTRON
+# a single layer neural network
+# only capable of learning linearly separable decision boundaries
+
+## * MULTI-LAYER PERCEPTRON
+# aritificial neural network with:
+'''
+  • an input layer
+  • one or more hidden layers
+  • an output layer
+
+  uses backpropagation 
+    PSEUDOCODE:
+      • start with random weights
+      • repeat:
+        • calculate error for output layer
+        • for each layer, starting with output layer and moving inwards towards earliest hidden layer:
+          • propagate error backwards
+          • update weights
+
+  allows for more complex decision boundaries
+  risk of overfitting increases with number of hidden layers
+'''
+## ! 36:56
