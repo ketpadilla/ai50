@@ -76,4 +76,62 @@
   allows for more complex decision boundaries
   risk of overfitting increases with number of hidden layers
 '''
-## ! 36:56
+
+## * DROPOUT
+# technique to reduce overfitting 
+# temporarily remove selected/random units from a neural network to prevent over-reliance on certain units
+
+## * TENSORFLOW
+# Google's open source library to create and train neural networks
+'''
+  playground.tensorflow.org
+
+  * more hidden layers -> more complex decision boundaries 
+
+'''
+
+## * COMPUTER VISION
+# computational methods for analyzing and understanding digital images
+'''
+  IMAGE CONVOLUTION
+  use a filter that addds each pixel value of an image to its neighbors, weighted by a kernel matrix
+  
+    KERNEL MATRIX
+    a matrix of weights
+    -> multiply each pixel value by its corresponding weight in the kernel matrix then take their sum
+    -> sum of:
+        0 -> no change (black)
+        255 -> maximum change (white)
+
+  POOLING 
+  reduce input size by sampling from regions of the input/image (i.e., downsampling)
+
+    MAX POOLING
+    choose maximum value from each region
+'''
+
+## * CONVOLUTIONAL NEURAL NETWORK
+# neural networks that use convolution and pooling to analyze images\
+'''
+  GENERAL STRUCTURE:
+  convolution -> pooling -> flattening -> input layer -> ...
+    * repeat convolution and pooling layers as needed 
+'''
+
+## * FEED-FORWARD NEURAL NETWORK
+# neural networks that has connections only in one direction
+'''
+  input -> network -> output
+'''
+
+## * RECURRENT NEURAL NETWORK
+# neural networks that has connections in both directions (forward and backward)
+'''
+           |<----
+           |    ^
+           v    |
+  input -> network -> output
+
+  * useful for analyzing sequences of data
+  * allows for one-to-many relationships (e.g., image captioning)
+'''
