@@ -1,6 +1,8 @@
 # TRAFFIC
-### Experimentation Process
+### Screencast
+https://youtu.be/74ZUTHL9VRE
 
+### Experimentation Process
 Since we are using the same Python Library from the lectures, I began with using the convolutional neural network shown during the time. The said neural network had:
 * a convolution layer
 * a max pooling layer
