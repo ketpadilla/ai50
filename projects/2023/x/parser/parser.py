@@ -67,9 +67,8 @@ def preprocess(sentence):
     """
 
     return set(
-        # lower 
-        word.lower() for word in nltk.word_tokenize(sentence)
-        if any(c.isalpha() for c in word)
+        word.lower() for word in nltk.word_tokenize(sentence) # lower case words
+        if any(c.isalpha() for c in word) # if word contains at least one alphabetic character
     )
 
 
@@ -82,9 +81,9 @@ def np_chunk(tree):
     noun phrases as subtrees.
     """
     npChunks = list() # list of noun phrase chunks
-    for subtree in tree.subtrees():
-        if subtree.label() == "NP":
-            npChunks.append(subtree)
+    for subtree in tree.subtrees(): # for each subtree in the tree
+        if subtree.label() == "NP": # if the subtree is a noun phrase
+            npChunks.append(subtree) # add subtree to list
     return npChunks
 
 
