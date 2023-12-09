@@ -1,6 +1,7 @@
 import nltk
 import sys
 
+
 TERMINALS = """
 Adj -> "country" | "dreadful" | "enigmatical" | "little" | "moist" | "red"
 Adv -> "down" | "here" | "never"
@@ -62,7 +63,13 @@ def preprocess(sentence):
     and removing any word that does not contain at least one alphabetic
     character.
     """
-    raise NotImplementedError
+
+    return set(
+        # lower 
+        word.lower() for word in nltk.word_tokenize(sentence)
+        if any(c.isalpha() for c in word)
+    )
+
 
 
 def np_chunk(tree):
