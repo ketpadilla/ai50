@@ -67,10 +67,8 @@ def preprocess(sentence):
     character.
     """
 
-    return set(
-        word.lower() for word in nltk.word_tokenize(sentence) # lower case words
-        if any(c.isalpha() for c in word) # if word contains at least one alphabetic character
-    )
+    tokens = nltk.word_tokenize(sentence) # tokenize sentence into list of words
+    return [entry.lower() for entry in tokens if any(char.isalpha() for char in entry)] # return lowercase strings that contain at least one alphabetic character
 
 
 
